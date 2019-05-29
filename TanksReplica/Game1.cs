@@ -105,6 +105,8 @@ namespace TanksReplica
             cube.initialize(GraphicsDevice);
             cube.health = 4;
             level = 0;
+            levelseconds = 0;
+            leveltimer = 0;
             levelenemies = new List<List<Enemy>>();
             List<Enemy> e0 = new List<Enemy>();
             e0.Add(new Enemy(new Vector3(15, 0, 30), 2, 2, 2, 2));
@@ -294,7 +296,7 @@ namespace TanksReplica
             {
                 if (state == 0)
                 {
-
+                    screen = start;
                     if (Keyboard.GetState().IsKeyDown(Keys.Space) || s.Buttons.A == ButtonState.Pressed)
                     {
                         state = 1;
@@ -311,7 +313,6 @@ namespace TanksReplica
                     {
                         world.Play();
                     }
-
                     List<Enemy> enemies = levelenemies.ElementAt<List<Enemy>>(level);
                     cube.update(Content, cap);
 
@@ -421,10 +422,11 @@ namespace TanksReplica
                             cube.direction = Vector3.Forward;
                             cube.initialize(GraphicsDevice);
                             cube.update();
-                            /*state = 1.1f;
+
+                            state = 4f;
                             screen = nextlevel;
-                            levelseconds = 3;
-                            world.Pause();*/
+                            //levelseconds = 3;
+                            world.Pause();
                         }
                         else
                         {
@@ -433,16 +435,17 @@ namespace TanksReplica
                             world.Stop();
                         }
                     }
-
+                    leveltimer++;
                 }
 
 
 
-                else if (state == 1.1)
+                else if (state == 4)
                 {
                     if (Keyboard.GetState().IsKeyDown(Keys.Space) || s.Buttons.A == ButtonState.Pressed)
                     {
                         state = 1;
+                        cube.bullettimer = 15;
                         world.Resume();
                     }
                 }
@@ -479,7 +482,7 @@ namespace TanksReplica
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            if (state == 1.1)
+            if (state == 4)
             {
                 spritebatch.Begin();
                 spritebatch.DrawString(data, "" + levelseconds, new Vector2(GraphicsDevice.Viewport.Width / 2, 3 * GraphicsDevice.Viewport.Height / 4), Color.Black);
